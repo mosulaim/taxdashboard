@@ -122,7 +122,7 @@ var properties = [{
       "no": "No"
     }
   }
-}
+}  // my comment
 */
 ];
 
