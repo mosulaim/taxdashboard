@@ -1,15 +1,15 @@
 var config = {
-  geojson: "https://web.fulcrumapp.com/shares/a5c8e07368efde43.geojson",
-  title: "Congress Park Trees",
-  layerName: "Trees",
-  hoverProperty: "species_sim",
-  sortProperty: "dbh_2012_inches_diameter_at_breast_height_46",
+  geojson: "http://portal.geostation.net/assets/building84.json",
+  title: "Tax Monitor",
+  layerName: "Buildings",
+  hoverProperty: "PPTY_USE",
+  sortProperty: "OBJECTID_1",
   sortOrder: "desc"
 };
 
 var properties = [{
-  value: "fulcrum_id",
-  label: "Fulcrum ID",
+  value: "PPTY_ID",
+  label: "Property ID",
   table: {
     visible: false,
     sortable: true
@@ -20,8 +20,8 @@ var properties = [{
   info: false
 },
 {
-  value: "status",
-  label: "Status",
+  value: "PPTY_USE",
+  label: "Property Use",  //Status
   table: {
     visible: true,
     sortable: true
@@ -36,8 +36,8 @@ var properties = [{
   }
 },
 {
-  value: "congress_park_inventory_zone",
-  label: "Inventory Zone",
+  value: "PPTY_TYPE",
+  label: "Property Type",  //Inventory Zone
   table: {
     visible: true,
     sortable: true
@@ -52,8 +52,8 @@ var properties = [{
   }
 },
 {
-  value: "2012_inventory_number",
-  label: "Inventory Number",
+  value: "OBJECTID_1",
+  label: "Serial Number",  //Inventory
   table: {
     visible: true,
     sortable: true
@@ -63,8 +63,8 @@ var properties = [{
   }
 },
 {
-  value: "species_sim",
-  label: "Species",
+  value: "TAX_APPLI",
+  label: "Tax Applicable",  //Species
   table: {
     visible: true,
     sortable: true
@@ -74,16 +74,27 @@ var properties = [{
   }
 },
 {
-  value: "circumference_2012_inches_at_breast_height_",
-  label: "Circumference (inches)",
+  value: "photos_url",
+  label: "Photos",
+  table: {
+    visible: false,
+    sortable: true,
+    formatter: urlFormatter
+  },
+  filter: false
+},
+{
+  value: "LT_AMT_PD",
+  label: "Last Tax Paid",
   table: {
     visible: true,
     sortable: true
   },
   filter: {
-    type: "integer"
+    type: "string"
   }
-},
+}
+/*,
 {
   value: "dbh_2012_inches_diameter_at_breast_height_46",
   label: "DBH (inches)",
@@ -111,38 +122,20 @@ var properties = [{
       "no": "No"
     }
   }
-},
-{
-  value: "notes_other_information",
-  label: "Notes",
-  table: {
-    visible: false,
-    sortable: true
-  },
-  filter: {
-    type: "string"
-  }
-},
-{
-  value: "photos_url",
-  label: "Photos",
-  table: {
-    visible: true,
-    sortable: true,
-    formatter: urlFormatter
-  },
-  filter: false
-}];
+}
+*/
+];
+
 
 function drawCharts() {
-  // Status
+  // Property Use
   $(function() {
-    var result = alasql("SELECT status AS label, COUNT(*) AS total FROM ? GROUP BY status", [features]);
-    var columns = $.map(result, function(status) {
-      return [[status.label, status.total]];
+    var result = alasql("SELECT PPTY_USE AS label, COUNT(*) AS total FROM ? GROUP BY PPTY_USE", [features]);
+    var columns = $.map(result, function(propuse) {
+      return [[propuse.label, propuse.total]];
     });
     var chart = c3.generate({
-        bindto: "#status-chart",
+        bindto: "#propUse-chart",
         data: {
           type: "pie",
           columns: columns
@@ -150,20 +143,21 @@ function drawCharts() {
     });
   });
 
-  // Zones
+  // Tax type
   $(function() {
-    var result = alasql("SELECT congress_park_inventory_zone AS label, COUNT(*) AS total FROM ? GROUP BY congress_park_inventory_zone", [features]);
-    var columns = $.map(result, function(zone) {
-      return [[zone.label, zone.total]];
+    var result = alasql("SELECT TAX_APPLI AS label, COUNT(*) AS total FROM ? GROUP BY TAX_APPLI", [features]);
+    var columns = $.map(result, function(taxtype) {
+      return [[taxtype.label, taxtype.total]];
     });
     var chart = c3.generate({
-        bindto: "#zone-chart",
+        bindto: "#taxtype-chart",
         data: {
           type: "pie",
           columns: columns
         }
     });
   });
+/*
 
   // Size
   $(function() {
@@ -214,7 +208,9 @@ function drawCharts() {
         }
     });
   });
+  */
 }
+
 
 $(function() {
   $(".title").html(config.title);
@@ -310,16 +306,16 @@ function buildConfig() {
 }
 
 // Basemap Layers
-var mapboxOSM = L.tileLayer("https://{s}.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZnVsY3J1bSIsImEiOiJjaXI1MHZnNGcwMW41ZnhucjNkOTB1cncwIn0.4ZADnELXGBXsN_RxnPK3Sw", {
+var mapboxOSM = L.tileLayer("https://{s}.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibW9zdWxhaW0iLCJhIjoiY2pnNWI0dnU5MGNpYjJxcm5hcmFhd2V3bSJ9.wFuvx6_m8xxdHtavOTMFXA", {
   maxZoom: 19,
   subdomains: ["a", "b", "c", "d"],
-  attribution: 'Basemap <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox © OpenStreetMap</a>'
+  attribution: 'Powered by <a href="http://www.geostation.net/" target="_blank">GeoStation</a> by Sulaiman'
 });
 
-var mapboxSat = L.tileLayer("https://{s}.tiles.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZnVsY3J1bSIsImEiOiJjaXI1MHZnNGcwMW41ZnhucjNkOTB1cncwIn0.4ZADnELXGBXsN_RxnPK3Sw", {
+var mapboxSat = L.tileLayer("https://{s}.tiles.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibW9zdWxhaW0iLCJhIjoiY2pnNWI0dnU5MGNpYjJxcm5hcmFhd2V3bSJ9.wFuvx6_m8xxdHtavOTMFXA", {
   maxZoom: 19,
   subdomains: ["a", "b", "c", "d"],
-  attribution: 'Basemap <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox © OpenStreetMap</a>'
+  attribution: 'Powered by <a href="http://www.geostation.net/" target="_blank">GeoStation</a> by Sulaiman'
 });
 
 var highlightLayer = L.geoJson(null, {
@@ -355,7 +351,7 @@ var featureLayer = L.geoJson(null, {
       color: feature.properties.color
     };
   },*/
-  pointToLayer: function (feature, latlng) {
+  /*pointToLayer: function (feature, latlng) {
     if (feature.properties && feature.properties["marker-color"]) {
       markerColor = feature.properties["marker-color"];
     } else {
@@ -369,7 +365,7 @@ var featureLayer = L.geoJson(null, {
       opacity: 1,
       fillOpacity: 1
     });
-  },
+  },*/
   onEachFeature: function (feature, layer) {
     if (feature.properties) {
       layer.on({
@@ -436,8 +432,8 @@ if (document.body.clientWidth <= 767) {
   isCollapsed = false;
 }
 var baseLayers = {
-  "Street Map": mapboxOSM,
-  "Aerial Imagery": mapboxSat
+  "Aerial Imagery": mapboxSat,
+  "Street Map": mapboxOSM
 };
 var overlayLayers = {
   "<span id='layer-name'>GeoJSON Layer</span>": featureLayer
@@ -562,9 +558,9 @@ function switchView(view) {
     $("#view").html("Split View");
     location.hash = "#split";
     $("#table-container").show();
-    $("#table-container").css("height", "55%");
+    $("#table-container").css("height", "45%");
     $("#map-container").show();
-    $("#map-container").css("height", "45%");
+    $("#map-container").css("height", "55%");
     $(window).resize();
     if (map) {
       map.invalidateSize();
