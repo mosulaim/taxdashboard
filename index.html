@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="Bryan McBride">
-    <title class="title">GeoJSON Dashboard</title>
+    <title class="title">Tax Monitor</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
@@ -43,7 +43,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <span class="navbar-brand title">GeoJSON Dashboard</span>
+          <span class="navbar-brand title">Tax Monitor</span>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -68,7 +68,7 @@
       <div id="map"></div>
     </div>
 
-    <div id="table-container">
+    <div class="col-md-7" id="table-container">
       <div id="toolbar" style="width: 400px;">
         <div class="btn-group" role="group">
           <button type="button" class="btn btn-default" data-toggle="modal" data-target="#filterModal">
@@ -89,6 +89,14 @@
       </div>
       <table id="table"></table>
     </div>
+    <div class="col-md-5" id="chart-container">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Property Use<em><span class="pull-right">Proportions of Property Use Types</span></em></h3>
+        </div>
+        <div id="propUse2-chart"></div>
+      </div>
+    </div>  
 
     <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
       <div class="modal-dialog">

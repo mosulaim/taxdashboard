@@ -1,5 +1,5 @@
 var config = {
-  geojson: "http://portal.geostation.net/assets/building84.json",
+  geojson: "http://tax.geostation.net/assets/building84.json",
   title: "Tax Monitor",
   layerName: "Buildings",
   hoverProperty: "PPTY_USE",
@@ -126,6 +126,22 @@ var properties = [{
 */
 ];
 
+function drawSepChart() {
+      // Property Use 2
+      $(function() {
+        var result = alasql("SELECT PPTY_USE AS label, COUNT(*) AS total FROM ? GROUP BY PPTY_USE", [features]);
+        var columns = $.map(result, function(propuse) {
+          return [[propuse.label, propuse.total]];
+        });
+        var chart = c3.generate({
+            bindto: "#propUse2-chart",
+            data: {
+              type: "pie",
+              columns: columns
+            }
+        });
+      });
+}
 
 function drawCharts() {
   // Property Use
@@ -558,9 +574,9 @@ function switchView(view) {
     $("#view").html("Split View");
     location.hash = "#split";
     $("#table-container").show();
-    $("#table-container").css("height", "45%");
+    $("#table-container").css("height", "50%");
     $("#map-container").show();
-    $("#map-container").css("height", "55%");
+    $("#map-container").css("height", "50%");
     $(window).resize();
     if (map) {
       map.invalidateSize();
@@ -680,4 +696,7 @@ $("#download-pdf-btn").click(function() {
 
 $("#chartModal").on("shown.bs.modal", function (e) {
   drawCharts();
+});
+$(document).one("ajaxStop", function () {
+  drawSepChart();
 });
