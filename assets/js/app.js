@@ -1,5 +1,5 @@
 var config = {
-  geojson: "http://portal.geostation.net/assets/building84.json",
+  geojson: "http://tax.geostation.net/assets/building84.json",
   title: "Tax Monitor",
   layerName: "Buildings",
   hoverProperty: "PPTY_USE",
