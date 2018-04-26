@@ -91,7 +91,7 @@ var properties = [{
     sortable: true
   },
   filter: {
-    type: "string"
+    type: "integer"
   }
 }
 /*,
@@ -126,22 +126,52 @@ var properties = [{
 */
 ];
 
+
 function drawSepChart() {
-      // Property Use 2
-      $(function() {
-        var result = alasql("SELECT PPTY_USE AS label, COUNT(*) AS total FROM ? GROUP BY PPTY_USE", [features]);
-        var columns = $.map(result, function(propuse) {
-          return [[propuse.label, propuse.total]];
-        });
-        var chart = c3.generate({
-            bindto: "#propUse2-chart",
-            data: {
-              type: "pie",
-              columns: columns
-            }
-        });
-      });
-}
+  // Property Use 2
+  $(function() {
+    var result = alasql("SELECT PPTY_USE AS label, COUNT(*) AS total FROM ? GROUP BY PPTY_USE", [features]);
+    var columns = $.map(result, function(propuse) {
+      return [[propuse.label, propuse.total]];
+    });
+    var chart = c3.generate({
+        bindto: "#propUse2-chart",
+        size: {
+          height: 250
+        },
+        data: {
+          type: "pie",
+          columns: columns
+        }
+    });
+  });
+  $(function() {
+    var result = alasql("SELECT PPTY_USE AS label, SUM(LT_AMT_PD::NUMBER) AS Revenue FROM ? GROUP BY PPTY_USE", [features]);
+    var chart = c3.generate({
+        bindto: "#revenue-chart",
+        size: {
+          height: 250
+        },
+        data: {
+          json: result,
+          keys: {
+            x: "label",
+            value: ["Revenue"]
+          },
+          type: "bar"
+        },
+        axis: {
+          rotated: false,
+          x: {
+            type: "category"
+          }
+        },
+        legend: {
+          show: true
+        }
+    });
+  });
+} 
 
 function drawCharts() {
   // Property Use
@@ -152,6 +182,21 @@ function drawCharts() {
     });
     var chart = c3.generate({
         bindto: "#propUse-chart",
+        data: {
+          type: "pie",
+          columns: columns
+        }
+    });
+  });
+
+   // Property Type
+   $(function() {
+    var result = alasql("SELECT PPTY_TYPE AS label, COUNT(*) AS total FROM ? GROUP BY PPTY_TYPE", [features]);
+    var columns = $.map(result, function(proptype) {
+      return [[proptype.label, proptype.total]];
+    });
+    var chart = c3.generate({
+        bindto: "#type-chart",
         data: {
           type: "pie",
           columns: columns
@@ -170,6 +215,34 @@ function drawCharts() {
         data: {
           type: "pie",
           columns: columns
+        }
+    });
+  });
+
+    // Tax paid
+  $(function() {
+    var result = alasql("SELECT PPTY_USE AS label, SUM(LT_AMT_PD::NUMBER) AS revenue FROM ? GROUP BY PPTY_USE", [features]);
+    var chart = c3.generate({
+        bindto: "#taxpaid-chart",
+        size: {
+          height: 300
+        },
+        data: {
+          json: result,
+          keys: {
+            x: "label",
+            value: ["revenue"]
+          },
+          type: "bar"
+        },
+        axis: {
+          rotated: false,
+          x: {
+            type: "category"
+          }
+        },
+        legend: {
+          show: true
         }
     });
   });
@@ -362,11 +435,33 @@ var featureLayer = L.geoJson(null, {
   filter: function(feature, layer) {
     return feature.geometry.coordinates[0] !== 0 && feature.geometry.coordinates[1] !== 0;
   },
-  /*style: function (feature) {
-    return {
-      color: feature.properties.color
-    };
-  },*/
+  style: function(feature) {
+    if (feature.properties.PPTY_USE == 'COMMERCIAL') {
+        return {
+            weight: 1,
+            opacity: 1,
+            color: '#ff6600',
+            fillOpacity: 0.3,
+            fillColor: '#ff6600'
+        };
+    } else if (feature.properties.PPTY_USE == 'INSTITUTIONAL'){
+        return {
+          weight: 1,
+          opacity: 1,
+          color: '#00ff22',
+          fillOpacity: 0.3,
+          fillColor: '#00ff22'
+        };
+    } else {
+        return {
+            weight: 1,
+            opacity: 1,
+            color: '#0099FF',
+            fillOpacity: 0.3,
+            fillColor: '#0099FF'
+        };
+    }
+},
   /*pointToLayer: function (feature, latlng) {
     if (feature.properties && feature.properties["marker-color"]) {
       markerColor = feature.properties["marker-color"];
@@ -577,6 +672,7 @@ function switchView(view) {
     $("#table-container").css("height", "50%");
     $("#map-container").show();
     $("#map-container").css("height", "50%");
+    $("#chart-container").show();
     $(window).resize();
     if (map) {
       map.invalidateSize();
@@ -585,6 +681,7 @@ function switchView(view) {
     $("#view").html("Map View");
     location.hash = "#map";
     $("#map-container").show();
+    $("#chart-container").show();
     $("#map-container").css("height", "100%");
     $("#table-container").hide();
     if (map) {
@@ -596,6 +693,7 @@ function switchView(view) {
     $("#table-container").show();
     $("#table-container").css("height", "100%");
     $("#map-container").hide();
+    $("#chart-container").hide();
     $(window).resize();
   }
 }
