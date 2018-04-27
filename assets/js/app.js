@@ -1,5 +1,6 @@
 var config = {
   geojson: "http://tax.geostation.net/assets/building84.json",
+  business: "http://geostation.herokuapp.com/taxform/pdata.php?geotable=business&",
   title: "Tax Monitor",
   layerName: "Buildings",
   hoverProperty: "PPTY_USE",
@@ -127,6 +128,36 @@ var properties = [{
 ];
 
 
+function viewbusi(bid) {
+ // alert('Business being fetched: ' + bid);
+  $('#featureModal').modal('hide');
+  $("#loading-mask").show();
+  $.getJSON(config.business + 'parameters=bld_id=' + bid, function (data) {
+    geojson = data;
+    features = $.map(geojson.features, function(feature) {
+      return feature.properties;
+    });
+    $("#loading-mask").hide();
+    businessLayer.clearLayers();
+    businessLayer.addData(data);
+    map.fitBounds(businessLayer.getBounds());
+    BusinessDetail(data);
+
+  });   
+
+/*
+  $.ajax({  
+    url: config.business + 'parameters=bld_id=' + bid,  
+    method:"GET", 
+    dataType:"json",  
+    success:function(data){ 
+     // businessLayer.addData(data);
+      var businessLayer = L.geoJSON(data, {}).addTo(map);
+      map.fitBounds(businessLayer.getBounds());
+    }  
+ });   */
+}
+
 function drawSepChart() {
   // Property Use 2
   $(function() {
@@ -146,7 +177,7 @@ function drawSepChart() {
     });
   });
   $(function() {
-    var result = alasql("SELECT PPTY_USE AS label, SUM(LT_AMT_PD::NUMBER) AS Revenue FROM ? GROUP BY PPTY_USE", [features]);
+    var result = alasql("SELECT TAX_APPLI AS label, SUM(LT_AMT_PD::NUMBER) AS Revenue FROM ? GROUP BY TAX_APPLI", [features]);
     var chart = c3.generate({
         bindto: "#revenue-chart",
         size: {
@@ -431,6 +462,22 @@ var highlightLayer = L.geoJson(null, {
   }
 });
 
+var businessLayer = L.geoJson(null, {
+  pointToLayer: function (feature, latlng) {
+    return L.circleMarker(latlng, {
+      radius: 5,
+      color: "#FFF",
+      weight: 2,
+      opacity: 1,
+      fillColor: "#0066FF",
+      fillOpacity: 1,
+      clickable: false
+    });
+  }
+});
+
+
+
 var featureLayer = L.geoJson(null, {
   filter: function(feature, layer) {
     return feature.geometry.coordinates[0] !== 0 && feature.geometry.coordinates[1] !== 0;
@@ -511,7 +558,7 @@ $.getJSON(config.geojson, function (data) {
 });
 
 var map = L.map("map", {
-  layers: [mapboxOSM, featureLayer, highlightLayer]
+  layers: [mapboxOSM, featureLayer, highlightLayer, businessLayer]
 }).fitWorld();
 
 // ESRI geocoder
@@ -660,8 +707,37 @@ function identifyFeature(id) {
     });
   });
   content += "<table>";
+ // content += '<input type="hidden" value="' + id + '" name="bid" id="bid">';
   $("#feature-info").html(content);
+  document.getElementById("viewbusi").setAttribute( "onClick", 'javascript:viewbusi('+ featureProperties.OBJECTID_1 +');' );
   $("#featureModal").modal("show");
+}
+
+function BusinessDetail(data) {
+  var businessFeatures = data.features;
+  var content = "<table class='table table-striped table-bordered table-condensed'>";
+  var tabhead;
+  var tabrow, tabbody;
+  businessFeatures.forEach(function(entry) {
+    var businessProperties = entry.properties;
+    tabhead = "";
+    tabrow = "";
+    $.each(businessProperties, function(key, value) {
+      if (!value) {
+        value = "";
+      }
+      if (typeof value == "string" && (value.indexOf("http") === 0 || value.indexOf("https") === 0)) {
+        value = "<a href='" + value + "' target='_blank'>" + value + "</a>";
+      }
+      tabhead += "<th>" + key + "</th>";
+      tabrow += "<td>" + value + "</td>";
+    });  
+    tabbody += "<tr>" + tabrow + "</tr>";
+  });
+  tabhead = '<thead><tr>' + tabhead + '</tr></thead>';
+  content += tabhead + tabbody + "<table>";
+  $("#business-info").html(content);
+  $("#businessModal").modal("show");
 }
 
 function switchView(view) {

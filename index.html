@@ -70,7 +70,7 @@
     <div class="col-md-4" id="chart-container">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Tax Paid<em><span class="pull-right">Revenue by Property Use</span></em></h3>
+          <h3 class="panel-title">Total Tax Paid<em><span class="pull-right">Revenue by Tax Types</span></em></h3>
         </div>
         <div id="revenue-chart"></div>
       </div>
@@ -97,10 +97,10 @@
       </div>
       <table id="table"></table>
     </div>
-    <div class="col-md-4" id="chart-container">
+    <div class="col-md-4" id="chart-container2">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Property Use<em><span class="pull-right">Proportions of Property Use Types</span></em></h3>
+          <h3 class="panel-title">Property Use<em><span class="pull-right">% of  Use Categories</span></em></h3>
         </div>
         <div id="propUse2-chart"></div>
       </div>
@@ -215,11 +215,27 @@
           </div>
           <div class="modal-body" id="feature-info"></div>
           <div class="modal-footer">
+            <input type="button" value="View Businesses" id="viewbusi" class="btn btn-primary">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="businessModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">Business List</h4>
+            </div>
+            <div class="modal-body" id="business-info" style="overflow-x: scroll;"></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
