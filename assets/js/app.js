@@ -720,7 +720,7 @@ function BusinessDetail(data) {
   var businessFeatures = data.features;
   var content = "<table class='table table-striped table-bordered table-condensed'>";
   var tabhead;
-  var tabrow, tabbody;
+  var tabrow, tabbody = "";
   businessFeatures.forEach(function(entry) {
     var businessProperties = entry.properties;
     tabhead = "";
@@ -738,7 +738,7 @@ function BusinessDetail(data) {
     tabbody += "<tr>" + tabrow + "</tr>";
   });
   tabhead = '<thead><tr>' + tabhead + '</tr></thead>';
-  content += tabhead + tabbody + "<table>";
+  content += tabhead + tabbody + "</table>";
   $("#business-info").html(content);
   $("#businessModal").modal("show");
 }
