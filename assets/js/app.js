@@ -1,11 +1,14 @@
 var config = {
   geojson: "http://tax.geostation.net/assets/building84.json",
-  business: "http://geostation.herokuapp.com/taxform/pdata.php?geotable=business&",
   title: "Tax Monitor",
   layerName: "Buildings",
   hoverProperty: "PPTY_USE",
   sortProperty: "OBJECTID_1",
   sortOrder: "desc"
+};
+
+var buscon = {
+business: "http://geostation.herokuapp.com/taxform/pdata.php?geotable=business&"
 };
 
 var properties = [{
@@ -132,7 +135,7 @@ function viewbusi(bid) {
  // alert('Business being fetched: ' + bid);
   $('#featureModal').modal('hide');
   $("#loading-mask").show();
-  $.getJSON(config.business + 'parameters=bld_id=' + bid, function (data) {
+  $.getJSON(buscon.business + 'parameters=bld_id=' + bid, function (data) {
     //geojson = data;
     features = $.map(data.features, function(feature) {
       return feature.properties;
