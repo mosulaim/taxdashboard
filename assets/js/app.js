@@ -137,9 +137,9 @@ function viewbusi(bid) {
   $("#loading-mask").show();
   $.getJSON(buscon.business + 'parameters=bld_id=' + bid, function (data) {
     //geojson = data;
-    features = $.map(data.features, function(feature) {
+  /*  features = $.map(data.features, function(feature) {
       return feature.properties;
-    });
+    });   */
     $("#loading-mask").hide();
     businessLayer.clearLayers();
     businessLayer.addData(data);
