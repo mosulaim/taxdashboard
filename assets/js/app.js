@@ -133,8 +133,8 @@ function viewbusi(bid) {
   $('#featureModal').modal('hide');
   $("#loading-mask").show();
   $.getJSON(config.business + 'parameters=bld_id=' + bid, function (data) {
-    geojson = data;
-    features = $.map(geojson.features, function(feature) {
+    //geojson = data;
+    features = $.map(data.features, function(feature) {
       return feature.properties;
     });
     $("#loading-mask").hide();
