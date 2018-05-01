@@ -146,7 +146,7 @@ function viewbusi(bid) {
     map.fitBounds(businessLayer.getBounds());
     BusinessDetail(data);
 
-  });   
+  });
 
 /*
   $.ajax({  
@@ -159,6 +159,16 @@ function viewbusi(bid) {
       map.fitBounds(businessLayer.getBounds());
     }  
  });   */
+}
+function liveData() {
+  $.getJSON(buscon.business, function (data) {
+    liveLayer.clearLayers();
+    liveLayer.addData(data);
+    map.fitBounds(liveLayer.getBounds()); 
+  });   
+  if (document.getElementById("autosec").checked) {
+       setTimeout(function() {liveData()}, 5000);
+  }
 }
 
 function drawSepChart() {
@@ -479,6 +489,28 @@ var businessLayer = L.geoJson(null, {
   }
 });
 
+var liveLayer = L.geoJson(null, {
+  pointToLayer: function (feature, latlng) {
+    return L.circleMarker(latlng, {
+      radius: 5,
+      color: "#FFF",
+      weight: 2,
+      opacity: 1,
+      fillColor: "#0066FF",
+      fillOpacity: 1,
+      clickable: true
+    });
+  },
+  onEachFeature: function (feature, layer) {
+    if (feature.properties) {
+      layer.on({
+        click: function (e) {
+          liveIdentify(L.stamp(layer));
+        }
+      });
+    }
+  }
+});
 
 
 var featureLayer = L.geoJson(null, {
@@ -561,7 +593,7 @@ $.getJSON(config.geojson, function (data) {
 });
 
 var map = L.map("map", {
-  layers: [mapboxOSM, featureLayer, highlightLayer, businessLayer]
+  layers: [mapboxOSM, featureLayer, highlightLayer, businessLayer, liveLayer]
 }).fitWorld();
 
 // ESRI geocoder
@@ -597,7 +629,7 @@ var baseLayers = {
   "Street Map": mapboxOSM
 };
 var overlayLayers = {
-  "<span id='layer-name'>GeoJSON Layer</span>": featureLayer
+  "<span id='layer-name'>Buildings</span>": featureLayer
 };
 var layerControl = L.control.layers(baseLayers, overlayLayers, {
   collapsed: isCollapsed
@@ -712,6 +744,7 @@ function identifyFeature(id) {
   content += "<table>";
  // content += '<input type="hidden" value="' + id + '" name="bid" id="bid">';
   $("#feature-info").html(content);
+  document.getElementById("viewbusi").style.visibility = "visible";
   document.getElementById("viewbusi").setAttribute( "onClick", 'javascript:viewbusi('+ featureProperties.OBJECTID_1 +');' );
   $("#featureModal").modal("show");
 }
@@ -742,6 +775,34 @@ function BusinessDetail(data) {
   $("#business-info").html(content);
   $("#businessModal").modal("show");
 }
+
+function liveIdentify(id) {
+  var featureProperties = liveLayer.getLayer(id).feature.properties;
+  var content = "<table class='table table-striped table-bordered table-condensed'>";
+  $.each(featureProperties, function(key, value) {
+    if (!value) {
+      value = "";
+    }
+    if (typeof value == "string" && (value.indexOf("http") === 0 || value.indexOf("https") === 0)) {
+      value = "<a href='" + value + "' target='_blank'>" + value + "</a>";
+    }
+    content += "<tr><th>" + key + "</th><td>" + value + "</td></tr>";
+  });
+  content += "<table>";
+ // content += '<input type="hidden" value="' + id + '" name="bid" id="bid">';
+  $("#feature-info").html(content);
+  document.getElementById("viewbusi").style.visibility = "hidden";
+  $("#featureModal").modal("show");
+}
+
+$("#livedata-btn").click(function() {
+  layerControl.addOverlay(liveLayer, "Business Points")
+  document.getElementById("autosec-btn").style.display = "block";
+  document.getElementById("autosec").checked = true;
+  liveData();
+  $(".navbar-collapse.in").collapse("hide");
+  return false;
+});
 
 function switchView(view) {
   if (view == "split") {
