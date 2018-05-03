@@ -784,7 +784,7 @@ function liveIdentify(id) {
       value = "";
     }
     if (typeof value == "string" && (value.indexOf("http") === 0 || value.indexOf("https") === 0)) {
-      value = "<a href='" + value + "' target='_blank'>" + value + "</a>";
+      value = "<a href='" + value + "' target='_blank'><img src='" + value + "' alt='" + value + "' height='300'></a>";
     }
     content += "<tr><th>" + key + "</th><td>" + value + "</td></tr>";
   });
