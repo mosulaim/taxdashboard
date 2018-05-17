@@ -812,7 +812,7 @@ function showPic(mfilename) {
   //dbx.sharingGetSharedLinkFile({url: SHARED_LINK})
     .then(function(data) {
       var downloadUrl = URL.createObjectURL(data.fileBlob);
-      imageurl = "<a href='" + downloadUrl + "' target='_blank'>" + '<img style="height:300px;" src=' + downloadUrl + "' alt='" + data.name + '></a>';
+      imageurl = "<a href='" + downloadUrl + "' target='_blank'>" + "<img style='height:300px;' src='" + downloadUrl + "' alt='" + data.name + "'></a>";
     })
     .catch(function(error) {
       console.error(error);
