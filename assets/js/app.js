@@ -491,12 +491,17 @@ var businessLayer = L.geoJson(null, {
 
 var liveLayer = L.geoJson(null, {
   pointToLayer: function (feature, latlng) {
+    if (feature.properties.tin_status == 'NO') {
+      markerColor = "#FF0040";
+    } else {
+      markerColor = "#00FF66";
+    }
     return L.circleMarker(latlng, {
       radius: 5,
       color: "#FFF",
       weight: 2,
       opacity: 1,
-      fillColor: "#0066FF",
+      fillColor: markerColor,
       fillOpacity: 1,
       clickable: true
     });
