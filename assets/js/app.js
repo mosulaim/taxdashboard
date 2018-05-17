@@ -491,7 +491,7 @@ var businessLayer = L.geoJson(null, {
 
 var liveLayer = L.geoJson(null, {
   pointToLayer: function (feature, latlng) {
-    if (feature.properties.tin_status == 'NO') {
+    if (feature.properties.tax_status != 'Paid') {
       markerColor = "#FF0040";
     } else {
       markerColor = "#00FF66";
