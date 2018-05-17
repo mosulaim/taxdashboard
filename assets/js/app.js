@@ -792,7 +792,8 @@ function liveIdentify(id) {
       value = "<a href='" + value + "' target='_blank'><img src='" + value + "' alt='" + value + "' height='300'></a>";
     }
     if (typeof value == "string" && key == "pic" && value != "") {
-      value = showPic(value);
+      showPic(value);
+      value = '<div id="picresults"></div>'
     }
     content += "<tr><th>" + key + "</th><td>" + value + "</td></tr>";
   });
@@ -813,11 +814,12 @@ function showPic(mfilename) {
     .then(function(data) {
       var downloadUrl = URL.createObjectURL(data.fileBlob);
       imageurl = "<a href='" + downloadUrl + "' target='_blank'>" + "<img style='height:300px;' src='" + downloadUrl + "' alt='" + data.name + "'></a>";
+      document.getElementById('picresults').innerHTML = imageurl;
     })
     .catch(function(error) {
       console.error(error);
     });
-  return imageurl;
+  return false;
 }
 
 $("#livedata-btn").click(function() {
