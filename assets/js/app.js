@@ -806,12 +806,13 @@ function liveIdentify(id) {
 function showPic(mfilename) {
   var ACCESS_TOKEN = 'zXHE73rNcUkAAAAAAAABHTXMaxE9Ggo1xWeOqMD1hnha8929BWeSm1LLdaB-e76B'; // document.getElementById('access-token').value;
   var FILE_NAME = mfilename;
+  var imageurl;
   var dbx = new Dropbox.Dropbox({ accessToken: ACCESS_TOKEN });
   dbx.filesDownload({path: '/' + FILE_NAME})
   //dbx.sharingGetSharedLinkFile({url: SHARED_LINK})
     .then(function(data) {
       var downloadUrl = URL.createObjectURL(data.fileBlob);
-      var imageurl = "<a href='" + downloadUrl + "' target='_blank'>" + '<img style="height:300px;" src=' + downloadUrl + "' alt='" + data.name + '></a>';
+      imageurl = "<a href='" + downloadUrl + "' target='_blank'>" + '<img style="height:300px;" src=' + downloadUrl + "' alt='" + data.name + '></a>';
     })
     .catch(function(error) {
       console.error(error);
