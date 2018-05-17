@@ -793,7 +793,7 @@ function liveIdentify(id) {
     }
     if (typeof value == "string" && key == "pic" && value != "") {
       showPic(value);
-      value = '<div id="picresults"></div>'
+      value = '<div id="picresults">Fetching Picture Please wait...</div>'
     }
     content += "<tr><th>" + key + "</th><td>" + value + "</td></tr>";
   });
