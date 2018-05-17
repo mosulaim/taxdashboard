@@ -791,6 +791,9 @@ function liveIdentify(id) {
     if (typeof value == "string" && (value.indexOf("http") === 0 || value.indexOf("https") === 0)) {
       value = "<a href='" + value + "' target='_blank'><img src='" + value + "' alt='" + value + "' height='300'></a>";
     }
+    if (typeof value == "string" && key == "pic" && value != "") {
+      value = showPic(value);
+    }
     content += "<tr><th>" + key + "</th><td>" + value + "</td></tr>";
   });
   content += "<table>";
@@ -798,6 +801,22 @@ function liveIdentify(id) {
   $("#feature-info").html(content);
   document.getElementById("viewbusi").style.visibility = "hidden";
   $("#featureModal").modal("show");
+}
+
+function showPic(mfilename) {
+  var ACCESS_TOKEN = 'zXHE73rNcUkAAAAAAAABHTXMaxE9Ggo1xWeOqMD1hnha8929BWeSm1LLdaB-e76B'; // document.getElementById('access-token').value;
+  var FILE_NAME = mfilename;
+  var dbx = new Dropbox.Dropbox({ accessToken: ACCESS_TOKEN });
+  dbx.filesDownload({path: '/' + FILE_NAME})
+  //dbx.sharingGetSharedLinkFile({url: SHARED_LINK})
+    .then(function(data) {
+      var downloadUrl = URL.createObjectURL(data.fileBlob);
+      var imageurl = "<a href='" + downloadUrl + "' target='_blank'>" + '<img style="height:300px;" src=' + downloadUrl + "' alt='" + data.name + '></a>';
+    })
+    .catch(function(error) {
+      console.error(error);
+    });
+  return imageurl;
 }
 
 $("#livedata-btn").click(function() {
