@@ -1,5 +1,5 @@
 var config = {
-  geojson: "http://tax.geostation.net/assets/building84.json",
+  geojson: "http://tax.geostation.net/assets/bld.json",
   title: "Tax Monitor",
   layerName: "Buildings",
   hoverProperty: "PPTY_USE",
@@ -793,7 +793,7 @@ function liveIdentify(id) {
     }
     if (typeof value == "string" && key == "pic" && value != "") {
       showPic(value);
-      value = '<div id="picresults">Fetching Picture Please wait...</div>'
+      value = '<div id="picresults">Fetching Picture, Please wait...Will load here</div>'
     }
     content += "<tr><th>" + key + "</th><td>" + value + "</td></tr>";
   });
