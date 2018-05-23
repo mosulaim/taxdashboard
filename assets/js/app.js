@@ -709,7 +709,7 @@ function buildTable() {
     }
   });
 
-  map.fitBounds(bldabjLayer.getBounds());
+  map.fitBounds(featureLayer.getBounds());
 
   $(window).resize(function () {
     $("#table").bootstrapTable("resetView", {
@@ -973,4 +973,5 @@ $("#chartModal").on("shown.bs.modal", function (e) {
 });
 $(document).one("ajaxStop", function () {
   drawSepChart();
+  map.fitBounds(bldabjLayer.getBounds());
 });
