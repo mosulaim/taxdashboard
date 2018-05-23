@@ -590,7 +590,7 @@ var featureLayer = L.geoJson(null, {
   }
 });
 
-var bldabjLayer = featureLayer;
+var bldabjLayer = featureLayer
 $.getJSON(bldcon.bldabj, function (data) {
   bldabjLayer.addData(data);
 });
@@ -657,8 +657,6 @@ map.on("moveend", function (e) {
 map.on("click", function(e) {
   highlightLayer.clearLayers();
 });
-
-map.fitBounds(bldabjLayer.getBounds());
 
 // Table formatter to make links clickable
 function urlFormatter (value, row, index) {
