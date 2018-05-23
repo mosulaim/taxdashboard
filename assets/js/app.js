@@ -590,10 +590,10 @@ var featureLayer = L.geoJson(null, {
   }
 });
 
-var bldabjLayer = featureLayer
+/*var bldabjLayer = featureLayer;
 $.getJSON(bldcon.bldabj, function (data) {
   bldabjLayer.addData(data);
-});
+}); */
 
 // Fetch the GeoJSON file
 $.getJSON(config.geojson, function (data) {
