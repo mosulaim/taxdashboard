@@ -1,5 +1,5 @@
 var config = {
-  geojson: "http://tax.geostation.net/assets/bld.json",
+  geojson: "http://tax.geostation.net/assets/bldall.json",
   title: "Tax Monitor",
   layerName: "Buildings",
   hoverProperty: "PPTY_USE",
@@ -10,6 +10,10 @@ var config = {
 var buscon = {
 business: "http://geostation.herokuapp.com/taxform/pdata.php?geotable=business&"
 };
+
+var bldcon = {
+  bldabj: "http://tax.geostation.net/assets/bldabj.json"
+  };
 
 var properties = [{
   value: "PPTY_ID",
@@ -586,6 +590,11 @@ var featureLayer = L.geoJson(null, {
   }
 });
 
+var bldabjLayer = featureLayer;
+$.getJSON(bldcon.bldabj, function (data) {
+  bldabjLayer.addData(data);
+});
+
 // Fetch the GeoJSON file
 $.getJSON(config.geojson, function (data) {
   geojson = data;
@@ -700,7 +709,7 @@ function buildTable() {
     }
   });
 
-  map.fitBounds(featureLayer.getBounds());
+  map.fitBounds(bldabjLayer.getBounds());
 
   $(window).resize(function () {
     $("#table").bootstrapTable("resetView", {
