@@ -658,6 +658,8 @@ map.on("click", function(e) {
   highlightLayer.clearLayers();
 });
 
+map.fitBounds(bldabjLayer.getBounds());
+
 // Table formatter to make links clickable
 function urlFormatter (value, row, index) {
   if (typeof value == "string" && (value.indexOf("http") === 0 || value.indexOf("https") === 0)) {
@@ -973,5 +975,4 @@ $("#chartModal").on("shown.bs.modal", function (e) {
 });
 $(document).one("ajaxStop", function () {
   drawSepChart();
-  map.fitBounds(bldabjLayer.getBounds());
 });
