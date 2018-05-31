@@ -826,6 +826,7 @@ function showPic(mfilename) {
       document.getElementById('picresults').innerHTML = imageurl;
     })
     .catch(function(error) {
+      document.getElementById('picresults').innerHTML = "Picture Unavailable!";
       console.error(error);
     });
   return false;
