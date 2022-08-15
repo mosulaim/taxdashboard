@@ -454,11 +454,15 @@ var mapboxOSM = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11
   zoomOffset: -1,
   attribution: 'Powered by <a href="http://www.geostation.net/" target="_blank">GeoStation</a> by Sulaiman'
 });
-var mapboxSat = L.tileLayer("https://{s}.tiles.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibW9zdWxhaW0iLCJhIjoiY2pnNWI0dnU5MGNpYjJxcm5hcmFhd2V3bSJ9.wFuvx6_m8xxdHtavOTMFXA", {
+var mapboxSat = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibW9zdWxhaW0iLCJhIjoiY2pnNWI0dnU5MGNpYjJxcm5hcmFhd2V3bSJ9.wFuvx6_m8xxdHtavOTMFXA', {
+  maxZoom: 19,
+  attribution: 'Powered by <a href="http://www.geostation.net/" target="_blank">GeoStation</a> by Sulaiman'
+});
+/*var mapboxSat = L.tileLayer("https://{s}.tiles.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibW9zdWxhaW0iLCJhIjoiY2pnNWI0dnU5MGNpYjJxcm5hcmFhd2V3bSJ9.wFuvx6_m8xxdHtavOTMFXA", {
   maxZoom: 19,
   subdomains: ["a", "b", "c", "d"],
   attribution: 'Powered by <a href="http://www.geostation.net/" target="_blank">GeoStation</a> by Sulaiman'
-});
+});*/
 
 var highlightLayer = L.geoJson(null, {
   pointToLayer: function (feature, latlng) {
