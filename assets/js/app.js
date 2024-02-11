@@ -7,8 +7,9 @@ var config = {
   sortOrder: "desc"
 };
 
+//business: "http://geostation.herokuapp.com/taxform/pdata.php?geotable=business&"
 var buscon = {
-business: "http://geostation.herokuapp.com/taxform/pdata.php?geotable=business&"
+business: "https://hub.geostation.net/taxform/pdata.php?geotable=business&"
 };
 
 var bldcon = {
