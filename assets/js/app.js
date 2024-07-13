@@ -1,5 +1,5 @@
 var config = {
-  geojson: "http://tax.geostation.net/assets/bldall.json",
+  geojson: "https://tax.geostation.net/assets/bldall.json",
   title: "Tax Monitor",
   layerName: "Buildings",
   hoverProperty: "PPTY_USE",
@@ -13,7 +13,7 @@ business: "https://revbud.psgll.com/pdata.php?geotable=business&"
 };
 
 var bldcon = {
-  bldabj: "http://tax.geostation.net/assets/bldabj.json"
+  bldabj: "https://tax.geostation.net/assets/bldabj.json"
   };
 
 var properties = [{
