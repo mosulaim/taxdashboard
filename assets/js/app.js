@@ -9,7 +9,7 @@ var config = {
 
 //business: "http://geostation.herokuapp.com/taxform/pdata.php?geotable=business&"
 var buscon = {
-business: "https://hub.geostation.net/taxform/pdata.php?geotable=business&"
+business: "https://revbud.psgll.com/pdata.php?geotable=business&"
 };
 
 var bldcon = {
